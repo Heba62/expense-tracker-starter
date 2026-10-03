@@ -59,8 +59,18 @@ npm install express pg dotenv cors
 
 ## Screenshots
 
-<!-- Add 2-3 screenshots of your app (desktop and mobile). -->
+![desktop](image.png)
+![desktop-1](image-1.png)
+![mobile](image-3.png)
+![mobile-1](image-4.png)
+
 
 ## What was the hardest part?
 
 The most challenging part was dynamically managing and aggregating total amounts by category for charts and UI summaries, without relying on complex external charting libraries. We initially encountered an issue where individual expense items were displayed separately instead of being grouped by category; we resolved this by implementing a grouping loop (using a [categoryMap]) in JavaScript to seamlessly aggregate amounts by category before rendering them.
+
+## Github:
+https://github.com/Heba62/expense-tracker-starter.git
+
+## Google Drive
+
