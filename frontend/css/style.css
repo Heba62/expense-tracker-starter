@@ -1,2 +1,480 @@
-/* Your custom styles go here.
-   Use Bootstrap classes first, and write your own CSS only when you need to. */
+:root {
+  --bg-main: #2d75400a;
+  --bg-card: #ffffff;
+  --bg-navbar: #d8dbd9;
+  --text-main: #8d7555;
+  --text-muted: #8d755562;
+  --border-color: #c4a2775c;
+  --input-border: #ccc;
+  --brand-hover: #c4a277;
+  --btn-bg: #8d7555;
+  --btn-hover: #66a979;
+  --dropdown-color: #66a979;
+  --bg-dark: #f7faf8;
+  --bg-light: #66a979;
+}
+
+
+[data-theme="dark"] {
+  --bg-main: #121413; 
+  --bg-card: #1e2320; 
+  --bg-navbar: #181c1a; 
+  --text-main: #d3c4b1; 
+  --text-muted: #a39583;
+  --border-color: #4a3e30;
+  --input-border: #3a443e;
+  --brand-hover: #e0be94;
+  --btn-bg: #66a979; 
+  --btn-hover: #8d7555;
+  --dropdown-color: #81c795;
+  --bg-dark: #66a979;
+  --bg-light: #f7faf8;
+}
+
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: cursive;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.darkMode {
+  background-color: var(--bg-dark);
+  border-radius: 31px;
+}
+
+#themeToggle {
+  font-size: 20px;
+  color: var(--bg-light);
+}
+
+#themeToggle:hover {
+  color: var(--text-main);
+  font-size: 23px;
+  transition:
+    font-size 0.4s ease,
+    color 0.4s ease;
+}
+
+.navbar {
+  padding: 14px 10%;
+  background-color: var(--bg-navbar);
+  transition: background-color 0.3s ease;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.navbar-brand {
+  font-size: 30px;
+  font-family: cursive;
+  color: var(--text-main);
+  transition: color 0.4s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--brand-hover);
+}
+
+.navbar-brand img {
+  width: 40px;
+}
+
+.Summary-card {
+  margin: 9% 15% 5%;
+  background-color: var(--bg-card);
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.cardd {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--bg-card);
+  padding: 5px 0 5px 0;
+  text-align: center;
+  color: var(--text-main);
+  width: 100%;
+  height: fit-content;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.cardd p {
+  font-size: 26px;
+  margin: 0;
+  padding: 20px;
+}
+
+.cardd h4 {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  font-weight: bold;
+}
+
+.form {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 0 15%;
+  transition: background-color 0.3s ease;
+}
+
+label {
+  font-size: 19px;
+}
+
+.form form {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 250px;
+}
+
+.form-group input,
+.form-selected {
+  padding: 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  background-color: var(--bg-card);
+  color: var(--text-main);
+}
+
+#expense-date {
+  color: var(--text-muted);
+}
+
+.form-selected:invalid {
+  color: var(--text-muted);
+}
+
+.form .btn-form,
+.btnChart {
+  background-color: var(--btn-bg);
+  border: 1px solid var(--btn-bg);
+  border-radius: 18px;
+  width: fit-content;
+  height: 36px;
+  color: #ffffff;
+  font-weight: bold;
+  font-family: cursive;
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.form .btn-form:hover,
+.btnChart:hover {
+  background-color: var(--btn-hover);
+  border: 1px solid var(--btn-hover);
+  color: #ffffff;
+}
+
+.category {
+  position: static;
+}
+
+h3 {
+  padding-bottom: 20px;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+input {
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+}
+
+input:focus {
+  border-color: var(--btn-hover) !important;
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+.expense {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 5% 15%;
+  transition: background-color 0.3s ease;
+}
+
+.hTable {
+  display: flex;
+  justify-content: space-between;
+}
+
+.expense .dropdown {
+  display: flex;
+  gap: 10px;
+  position: static;
+}
+
+.expense .dropdown-toggle {
+  white-space: nowrap;
+  color: var(--dropdown-color);
+  background-color: var(--bg-card);
+  border-radius: 7px;
+  border: 1px solid var(--dropdown-color);
+  width: fit-content;
+  height: fit-content;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.expense .dropdown-menu {
+  border: 1px solid var(--dropdown-color);
+  background-color: var(--bg-card);
+}
+
+.expense .dropdown-item,
+.form-selected option {
+  color: var(--dropdown-color);
+  background-color: var(--bg-card);
+  font-size: 13px;
+  transition:
+    color 0.4s ease,
+    font-size 0.4s ease;
+}
+
+.expense .dropdown-item:hover,
+.form-selected option:focus {
+  color: var(--text-main);
+  font-size: 17px;
+}
+
+th,
+td {
+  color: var(--text-main) !important;
+  outline: none;
+}
+
+th:not(:last-child)::after {
+  content: " ⇅";
+  font-size: 12px;
+  color: #aaa;
+  margin-right: 5px;
+}
+
+th.asc::after {
+  content: " ▲";
+  color: var(--dropdown-color);
+}
+
+th.desc::after {
+  content: " ▼";
+  color: var(--dropdown-color);
+}
+
+.btn-table button {
+  background-color: var(--bg-card);
+  border-radius: 6px;
+}
+
+.edit {
+  /* color: #3d9ae2; */
+  color: #ded930;
+  border: 1px solid;
+  transition:
+    color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+.edit a {
+  text-decoration: none;
+  color: #ded930;
+}
+
+.edit:hover {
+  background-color: #ded930;
+}
+
+.edit a:hover {
+  color: white;
+}
+
+.delete {
+  color: #cb1717;
+  border: 1px solid;
+  transition:
+    color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+.delete:hover {
+  background-color: #cb1717;
+  color: white;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  --bs-table-bg: var(--bg-card);
+}
+
+#export-csv-btn {
+    height: fit-content;
+    padding: 5px;
+    font-size: 13px;
+}
+
+.search{
+  text-align: end;
+    margin-bottom: 10px;
+}
+
+.search-box{
+  border-radius: 5px;
+}
+
+.catColor {
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 46%;
+}
+
+.chart {
+  margin: 5% 15%;
+  background-color: var(--bg-card);
+  border-radius: 10px;
+  padding: 25px;
+  justify-items: center;
+  transition: background-color 0.3s ease;
+}
+
+
+
+@media (max-width: 992px) {
+  .Summary-card,
+  .form,
+  .expense,
+  .chart {
+    margin: 5% 5%; 
+  }
+
+  .navbar {
+    padding: 12px 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 22px;
+  }
+
+  .navbar-brand img {
+    width: 32px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .form form {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-group {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .form .btn-form {
+    width: 100%; 
+    margin-top: 10px;
+  }
+
+  .hTable {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .expense .dropdown {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .table-expense {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 550px; 
+  }
+
+  .chart_types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .btnChart {
+    font-size: 13px;
+    padding: 5px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Summary-card,
+  .form,
+  .expense,
+  .chart {
+    margin: 4% 3%;
+    padding: 15px;
+  }
+
+  .cardd p {
+    font-size: 20px;
+    padding: 12px;
+  }
+
+  .cardd h4 {
+    font-size: 16px;
+  }
+}
+

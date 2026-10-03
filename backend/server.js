@@ -182,6 +182,7 @@ app.use((req, res) => {
     .json({ error: "Not Found", message: "Route does not exist." });
 });
 
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
