@@ -385,11 +385,8 @@ th.desc::after {
 
 
 @media (max-width: 992px) {
-  .Summary-card,
-  .form,
-  .expense,
-  .chart {
-    margin: 5% 5%; 
+  .Summary-card{
+    margin-top: 15%;
   }
 
   .navbar {
@@ -460,12 +457,15 @@ th.desc::after {
 }
 
 @media (max-width: 480px) {
-  .Summary-card,
   .form,
   .expense,
   .chart {
-    margin: 4% 3%;
     padding: 15px;
+  }
+
+  .Summary-card{
+    margin-top: 22%;
+     padding: 15px;
   }
 
   .cardd p {
