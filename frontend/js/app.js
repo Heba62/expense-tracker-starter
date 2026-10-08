@@ -1,10 +1,5 @@
 const API_URL = "http://localhost:3000/api/expenses";
 
-const expensesTableBody = document.querySelector(".expenseTableBody");
-const totalAmount = document.querySelector(".total-amount");
-const totalCount = document.querySelector(".total-count");
-const highestAmount = document.querySelector(".highest-amount");
-let editingId = null;
 
 function toggleSpinner(show) {
   const spinner = document.getElementById("loading-spinner");
@@ -31,7 +26,9 @@ function showAlert(message, type = "danger") {
 
 async function getExpenses() {
   const res = await fetch(API_URL);
-  return await res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Error: ${res.status}`);
+  return data;
 }
 
 async function addExpense(expenseData) {
@@ -40,14 +37,18 @@ async function addExpense(expenseData) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(expenseData),
   });
-  return await res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Error: ${res.status}`);
+  return data;
 }
 
 async function deleteExpense(id) {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
   });
-  return await res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Error: ${res.status}`);
+  return data;
 }
 
 async function updateExpense(id, expenseData) {
@@ -56,8 +57,13 @@ async function updateExpense(id, expenseData) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(expenseData),
   });
-  return await res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Error: ${res.status}`);
+  return data;
 }
+
+
+let cachedExpenses = [];
 
 async function refresh() {
   try {
@@ -103,6 +109,7 @@ async function refresh() {
   }
 }
 
+const expensesTableBody = document.querySelector(".expenseTableBody");
 const changeColor = document.getElementById("catColor");
 
 async function renderTable(list) {
@@ -137,11 +144,18 @@ async function renderTable(list) {
   });
 }
 
+const totalAmount = document.querySelector(".total-amount");
+const totalCount = document.querySelector(".total-count");
+const highestAmount = document.querySelector(".highest-amount");
+
 function renderSummary(list) {
   const totalCountF = list.length;
   totalCount.textContent = totalCountF + ` Expenses`;
 
-  const totalAmountF = list.reduce((sum, item) => sum + Number(item.amount), 0);
+  let totalAmountF = 0;
+  for (let i = 0; i < list.length; i++) {
+    totalAmountF += Number(list[i].amount);
+  }
   totalAmount.textContent = totalAmountF + ` JOD`;
 
   const highestAmountF =
@@ -150,9 +164,16 @@ function renderSummary(list) {
 }
 
 async function deleteData(id) {
-  if (confirm("Are you sure you want to delete this expense?")) {
+  if (!confirm("Are you sure you want to delete this expense?")) return;
+
+  try {
+    toggleSpinner(true);
     await deleteExpense(id);
-    refresh();
+    await refresh();
+  } catch (error) {
+    showAlert(error.message || "Failed to delete expense.");
+  } finally {
+    toggleSpinner(false);
   }
 }
 
@@ -169,6 +190,9 @@ function formatToInputDate(dateString) {
   return dateString.split("T")[0];
 }
 
+
+let editingId = null;
+
 function editExpense(id, title, amount, category, date) {
   editingId = id;
   document.getElementById("expense-title").value = title;
@@ -179,6 +203,7 @@ function editExpense(id, title, amount, category, date) {
   document.getElementById("btn-add-expense").textContent = "Update Expense";
   document.getElementById("h3-add").textContent = "Update Expense";
 }
+
 
 const expenseForm = document.getElementById("expense-form");
 
@@ -234,27 +259,15 @@ expenseForm.addEventListener("submit", async (e) => {
   }
 });
 
-const categoryInput = document.getElementById("expense-category");
-const dropdownItems = document.querySelectorAll(".itemCategory");
 
-let selectedCategory = "";
-
-dropdownItems.forEach((item) => {
-  item.addEventListener("click", (e) => {
-    selectedCategory = e.target.textContent;
-    categoryInput.value = selectedCategory;
-  });
-});
-
-async function applyFilter() {
+function applyFilter() {
   let filterCategory = "";
   const dropdownFilter = document.querySelectorAll(".filter");
   dropdownFilter.forEach((item) => {
     item.addEventListener("click", async (e) => {
       filterCategory = e.target.textContent.trim();
 
-      const expenses = await getExpenses();
-      let filteredList = expenses;
+      let filteredList = cachedExpenses;
 
       if (filterCategory !== "All Categories") {
         filteredList = expenses.filter(
@@ -268,12 +281,8 @@ async function applyFilter() {
 }
 
 let myChart = null;
-let cachedExpenses = [];
 
 function setChartType(chartType) {
-  if (cachedExpenses.length === 0) {
-    cachedExpenses = expenses;
-  }
 
   if (myChart) {
     myChart.destroy();
@@ -287,7 +296,7 @@ function createChart(data, type) {
 
   const categoryMap = {};
   data.forEach((item) => {
-    const cat = item.category || "Other";
+    const cat = item.category || "";
     const amt = parseFloat(item.amount) || 0;
 
     if (categoryMap[cat]) {
@@ -300,6 +309,18 @@ function createChart(data, type) {
   const labels = Object.keys(categoryMap);
   const amounts = Object.values(categoryMap);
 
+  const categoryColors = {
+    Bills: "rgba(255, 99, 132, 0.6)",       
+    Entertainment: "rgba(54, 162, 235, 0.6)", 
+    Other: "rgba(255, 206, 86, 0.6)",      
+    Transport: "rgba(153, 102, 255, 0.6)",   
+    Food: "rgba(75, 192, 192, 0.6)", 
+  };
+
+  const backgroundColors = labels.map(
+    (cat) => categoryColors[cat]
+  );
+
   myChart = new Chart(ctx, {
     type: type,
     data: {
@@ -308,13 +329,7 @@ function createChart(data, type) {
         {
           label: "Expenses by Category",
           data: amounts,
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.6)",
-            "rgba(54, 162, 235, 0.6)",
-            "rgba(255, 206, 86, 0.6)",
-            "rgba(75, 192, 192, 0.6)",
-            "rgba(153, 102, 255, 0.6)",
-          ],
+          backgroundColor: backgroundColors,
           borderWidth: 1,
         },
       ],
@@ -329,10 +344,6 @@ function createChart(data, type) {
   });
 }
 
-async function initChart() {
-  cachedExpenses = await getExpenses();
-  createChart(cachedExpenses, "bar");
-}
 
 const toggleBtn = document.getElementById("themeToggle");
 
@@ -406,7 +417,7 @@ function exportToCSV() {
     item.id || "",
     `"${(item.title || "").replace(/"/g, '""')}"`,
     item.amount || 0,
-    item.category || "Other",
+    item.category || "",
     item.date || "",
   ]);
 

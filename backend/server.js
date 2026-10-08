@@ -62,7 +62,7 @@ app.get("/api/expenses", async (req, res) => {
 app.get("/api/expenses/:id", async (req, res) => {
   const expenseId = req.params.id;
 
-  if (isNaN(expenseId)) {
+  if (isNaN(expenseId) || expenseId <= 0) {
     return res
       .status(400)
       .json({ error: "Invalid ID format. Must be a number." });
