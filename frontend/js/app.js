@@ -16,8 +16,17 @@ function showAlert(message, type = "danger") {
   const alertContainer = document.getElementById("alert-container");
   if (!alertContainer) return;
 
+  // إعطاء الحاوية موقعاً ثابتاً أسفل النافبار مباشرة
+  alertContainer.style.position = "fixed";
+  alertContainer.style.top = "70px"; 
+  alertContainer.style.left = "50%";
+  alertContainer.style.transform = "translateX(-50%)"; 
+  alertContainer.style.zIndex = "1050"; 
+  alertContainer.style.width = "90%";
+  alertContainer.style.maxWidth = "600px";
+
   alertContainer.innerHTML = `
-    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+    <div class="alert alert-${type} alert-dismissible fade show shadow-sm" role="alert">
       ${message}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
